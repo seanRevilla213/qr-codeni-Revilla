@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="qr-code.png">
+    <title>Digital Calling Card - Sean Benedict C. Revilla</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --success-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .main-wrapper {
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .card-container {
+            width: 100%;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            height: 120px;
+            background: linear-gradient(270deg, #059669, #10b981, #0ea5e9);
+            background-size: 600% 600%;
+            animation: moveGradient 8s ease infinite;
+        }
+
+        @keyframes moveGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .profile-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: -60px;
+            margin-bottom: 1rem;
+            gap: 0.5rem;
+        }
+
+        .avatar {
+            width: 92px;
+            height: 92px;
+            background-color: #1e293b;
+            border: 4px solid var(--card-bg);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #60a5fa;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.65rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: #334155;
+            border: 1px solid #475569;
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .profile-info h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.2rem;
+        }
+
+        .profile-info p {
+            font-size: 0.9rem;
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .info-section {
+            margin-top: 1.25rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.5rem 0.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .info-row:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--border-color);
+        }
+
+        .info-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            overflow: hidden;
+        }
+
+        .info-content span {
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .copy-hint {
+            font-size: 0.75rem;
+            color: #60a5fa;
+        }
+
+        .portfolio-section {
+            margin-top: 1.25rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tag {
+            background-color: #334155;
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 8px;
+            border: 1px solid #475569;
+        }
+
+        .portfolio-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            background-color: #334155;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 0.75rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid #475569;
+            transition: background-color 0.2s;
+        }
+
+        .portfolio-link:hover {
+            background-color: #475569;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: var(--success-color);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Modal for QR Code */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 500;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 320px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .qr-placeholder {
+            width: 180px;
+            height: 180px;
+            background: white;
+            margin: 0 auto 1rem auto;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="card-container">
+            <div class="card-header"></div>
+            <div class="card-body">
+                <div class="profile-flex">
+                    <div class="avatar">SR</div>
+                    <div class="action-group">
+                        <button class="btn btn-secondary" id="showQrBtn" title="Show QR Code">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                        </button>
+                        <button class="btn" id="saveContactBtn">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path></svg>
+                            Save Contact
+                        </button>
+                    </div>
+                </div>
+
+                <div class="profile-info">
+                    <h1>Sean Benedict C. Revilla</h1>
+                    <p>IT Student & Full-Stack Developer</p>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-row" onclick="copyToClipboard('Seca.revilla.sjc@phinmaed.com', 'Email copied!')">
+                        <div class="info-content">
+                            <svg width="18" height="18" fill="none" stroke="#60a5fa" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span>Seca.revilla.sjc@phinmaed.com</span>
+                        </div>
+                        <span class="copy-hint">Copy</span>
+                    </div>
+                    <div class="info-row" onclick="copyToClipboard('09662303810', 'Phone number copied!')">
+                        <div class="info-content">
+                            <svg width="18" height="18" fill="none" stroke="#60a5fa" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            <span>966 230 3810</span>
+                        </div>
+                        <span class="copy-hint">Copy</span>
+                    </div>
+                </div>
+
+                <div class="portfolio-section">
+                    <div class="section-title">Tech Stack</div>
+                    <div class="skills-grid">
+                        <span class="skill-tag">JavaScript (ES6+)</span>
+                        <span class="skill-tag">TypeScript</span>
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">ReactJS</span>
+                        <span class="skill-tag">Node.js</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <div class="modal-overlay" id="qrModal">
+        <div class="modal-card">
+            <h3>Portfolio QR Code</h3>
+            <p>I-scan ito para direktang mapunta sa iyong portfolio website.</p>
+            <div class="qr-placeholder">
+                <img id="qrImage" src="" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            <button class="btn" style="width: 100%; justify-content: center;" id="closeModalBtn">Isara</button>
+        </div>
+    </div>
+
+    <script>
+        const portfolioUrl = "https://sean-benedict-newportfolio.vercel.app/";
+
+        const contactData = {
+            fullName: "Sean Benedict C. Revilla",
+            firstName: "Sean Benedict",
+            lastName: "Revilla",
+            title: "IT Student & Full-Stack Developer",
+            organization: "PHINMA Saint Jude College Manila",
+            phone: "+639662303810",
+            email: "Seca.Revilla.sjc@phinmaed.com",
+            url: portfolioUrl
+        };
+
+        const generateVCard = ({ fullName, firstName, lastName, title, organization, phone, email, url }) => {
+            return [
+                "BEGIN:VCARD",
+                "VERSION:3.0",
+                `FN:${fullName}`,
+                `N:${lastName};${firstName};;;`,
+                `ORG:${organization}`,
+                `TITLE:${title}`,
+                `TEL;TYPE=CELL,VOICE:${phone}`,
+                `EMAIL;TYPE=INTERNET:${email}`,
+                `URL:${url}`,
+                "END:VCARD"
+            ].join("\n");
+        };
+
+        document.getElementById('saveContactBtn').addEventListener('click', () => {
+            const vcardContent = generateVCard(contactData);
+            const blob = new Blob([vcardContent], { type: 'text/vcard;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'Sean_Revilla_Contact.vcf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showToast("vCard downloaded successfully!");
+        });
+
+        function copyToClipboard(text, message) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(message);
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 2500);
+        }
+
+        const qrModal = document.getElementById('qrModal');
+        const showQrBtn = document.getElementById('showQrBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const qrImage = document.getElementById('qrImage');
+
+        showQrBtn.addEventListener('click', () => {
+            qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(portfolioUrl)}`;
+            qrModal.classList.add('active');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            qrModal.classList.remove('active');
+        });
+
+        qrModal.addEventListener('click', (e) => {
+            if (e.target === qrModal) {
+                qrModal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
